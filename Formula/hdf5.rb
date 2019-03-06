@@ -4,7 +4,7 @@ class Hdf5 < Formula
   url "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.4/src/hdf5-1.10.4.tar.bz2"
   sha256 "1267ff06aaedc04ca25f7c6026687ea2884b837043431195f153401d942b28df"
 
-  keg_only "conflicts with homebrew/core/hdf5"
+  keg_only "nlsec/nlesc/hdf5 conflicts with homebrew/core/hdf5"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build

@@ -4,7 +4,7 @@ class Netcdf < Formula
   url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.6.2.tar.gz"
   sha256 "c37525981167b3cd82d32e1afa3022afb94e59287db5f116c57f5ed4d9c6a638"
 
-  keg_only "conclifts with homebrew/core/netcdf"
+  keg_only "nlesc/nlesc/netcdf conflicts with homebrew/core/netcdf"
 
   depends_on "cmake" => :build
   depends_on "gcc" # for gfortran
@@ -35,7 +35,7 @@ class Netcdf < Formula
     mkdir "build" do
       args = common_args.dup
       args << "-DENABLE_TESTS=OFF"
-      args << "-DNC_EXTRA_DEPS=-lmpi" if Tab.for_name("hdf5").with? "mpi"
+      args << "-DNC_EXTRA_DEPS=-lmpi" if Tab.for_name("hdf5").with? "open-mpi"
       args << "-DENABLE_DAP_AUTH_TESTS=OFF" << "-DENABLE_NETCDF_4=ON" << "-DENABLE_DOXYGEN=OFF"
 
       system "cmake", "..", "-DBUILD_SHARED_LIBS=ON", *args
