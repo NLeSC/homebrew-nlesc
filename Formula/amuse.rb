@@ -94,46 +94,25 @@ class Amuse < Formula
     sha256 "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
   end
 
-  patch <<-END_PATCH
+  patch <<-END_VIRTUALENV_PATCH
 --- a/amuse-env   2019-03-12 13:49:49.000000000 +0100
 +++ b/amuse-env   2019-03-12 13:49:37.000000000 +0100
-@@ -0,0 +1,48 @@
-+. LIBEXEC_PREFIX/bin/activate
-+
+@@ -0,0 +1,49 @@
 +prepend_path () {
 +    eval $1=\\"$2${!1:+":"}${!1}\\"
 +}
 +
 +extend_path () {
 +  if ! [ -z "${!1+_}" ]; then
-+      eval _OLD_VIRTUAL_$1="${!1}"
++      eval _OLD_AMUSE_$1=\\"${!1}\\"
 +  fi
 +
 +  prepend_path "$1" "$2"
 +}
 +
-+eval 'deactivate () {
-+    '"$(declare -f deactivate | tail -n+2)"'
++extend_path PATH "#{Formula[netcdf].bin}:#{Formula[hdf5].bin}"
 +
-+    reset_path () {
-+        local OLDNAME="_OLD_VIRTUAL_$1"
-+        if [ -z "${!OLDNAME+_}" ]; then
-+            unset $1
-+        else
-+            eval $1="${!OLDNAME}"
-+            unset $OLDNAME
-+        fi
-+    }
-+
-+    reset_path PKG_CONFIG_PATH
-+    reset_path C_INCLUDE_PATH
-+    reset_path CPLUS_INCLUDE_PATH
-+    reset_path LIBRARY_PATH
-+
-+    unset -f reset_path
-+}'
-+
-+prepend_path PATH "#{Formula[netcdf].bin}:#{Formula[hdf5].bin}"
++. LIBEXEC_PREFIX/bin/activate
 +
 +extend_path PKG_CONFIG_PATH "#{Formula[netcdf].lib}/pkgconfig"
 +extend_path C_INCLUDE_PATH "#{Formula[netcdf].include}:#{Formula[hdf5].include}"
@@ -142,11 +121,46 @@ class Amuse < Formula
 +
 +unset -f prepend_path extend_path
 +
++eval 'deactivate () {
++    '"$(declare -f deactivate | tail -n+2)"'
++
++    reset_path () {
++        local OLDNAME="_OLD_AMUSE_$1"
++        if [ -z "${!OLDNAME+_}" ]; then
++            unset $1
++        else
++            eval $1=\\"${!OLDNAME}\\"
++            unset $OLDNAME
++        fi
++    }
++
++    reset_path PATH
++    reset_path PKG_CONFIG_PATH
++    reset_path C_INCLUDE_PATH
++    reset_path CPLUS_INCLUDE_PATH
++    reset_path LIBRARY_PATH
++
++    unset -f reset_path
++}'
++
 +export PATH PKG_CONFIG_PATH C_INCLUDE_PATH CPLUS_INCLUDE_PATH LIBRARY_PATH
 +if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ] ; then
 +    hash -r 2>/dev/null
 +fi
-END_PATCH
+END_VIRTUALENV_PATCH
+
+  patch <<-END_NF_CONFIG_PATCH
+--- a/nf-config   2019-03-12 13:49:49.000000000 +0100
++++ b/nf-config   2019-03-12 13:49:37.000000000 +0100
+@@ -0,0 +1,7 @@
++#!/usr/bin/env sh
++if [ "$#" -ne 1 ] || [ "$1" != "--prefix" ]; then
++  echo "nf-config not fully implemented"
++  exit 1
++fi
++
++printf "#{Formula[netcdf].opt_prefix}\\n"
+END_NF_CONFIG_PATCH
 
   def install
     venv = virtualenv_create(libexec)
@@ -162,8 +176,10 @@ END_PATCH
       "AMUSE"
 
     inreplace "amuse-env", "LIBEXEC_PREFIX", libexec
-    bin.mkpath
-    bin.install "amuse-env"
+    libexec.install "amuse-env"
+
+    chmod 0755, "nf-config"
+    (libexec/"bin").install "nf-config"
   end
 
   def caveats
@@ -171,11 +187,11 @@ END_PATCH
 Dependencies were installed in a virtualenv.
 To activate it and be able to build AMUSE from source, run:
 
-    . #{prefix}/bin/amuse-env
+    . #{prefix}/libexec/amuse-env
 
 Or add an alias to do so to your ~/.bashrc:
 
-    alias amuse-env='. #{prefix}/bin/amuse-env'
+    alias amuse-env='. #{prefix}/libexec/amuse-env'
 
 To deactivate, run:
 
