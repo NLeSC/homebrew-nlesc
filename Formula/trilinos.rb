@@ -8,15 +8,11 @@ class Trilinos < Formula
   hdf5 = "nlesc/nlesc/hdf5"
   parmetis = "nlesc/nlesc/parmetis"
 
-  keg_only "only configured to work for nlesc/nlesc/i-emic"
+  keg_only "it is only configured to work for nlesc/nlesc/i-emic"
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on "gcc" # for gfortran
-  depends_on "python3" => :optional
   depends_on "open-mpi"
-  depends_on "openblas"
-  depends_on "lapack"
   depends_on "metis"
   depends_on parmetis
   depends_on hdf5 => ["with-open-mpi"]
