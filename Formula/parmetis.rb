@@ -5,6 +5,7 @@ class Parmetis < Formula
   sha256 "f2d9a231b7cf97f1fee6e8c9663113ebf6c240d407d3c118c55b3633d6be6e5f"
 
   depends_on "cmake" => :build
+  depends_on "metis"
   depends_on "open-mpi"
 
   # Bug fixes from PETSc developers. Mirrored because the SHA-256s get
@@ -22,6 +23,7 @@ class Parmetis < Formula
   end
 
   def install
+    ENV["LDFLAGS"] = "-L#{Formula["metis"].lib}"
     system "make", "config", "prefix=#{prefix}", "shared=1"
     system "make", "install"
     pkgshare.install "Graphs" # Sample data for test
@@ -32,3 +34,16 @@ class Parmetis < Formula
     ohai "Test results are in ~/Library/Logs/Homebrew/parmetis."
   end
 end
+
+__END__
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -33,7 +33,7 @@ include_directories(${GKLIB_PATH})
+ include_directories(${METIS_PATH}/include)
+
+ # List of directories that cmake will look for CMakeLists.txt
+-add_subdirectory(${METIS_PATH}/libmetis ${CMAKE_BINARY_DIR}/libmetis)
++#add_subdirectory(${METIS_PATH}/libmetis ${CMAKE_BINARY_DIR}/libmetis)
+ add_subdirectory(include)
+ add_subdirectory(libparmetis)
+ add_subdirectory(programs)
