@@ -1,9 +1,13 @@
 class Trilinos < Formula
   desc "Solution of large-scale, multi-physics problems"
   homepage "https://trilinos.github.io/"
-  url "http://trilinos.csbsju.edu/download/files/trilinos-12.12.1-Source.tar.gz"
-  sha256 "7c67d83befbeabc773661bcdfee2850c404d249160b755d3f1be2e96f564f9fd"
-  head "https://github.com/trilinos/Trilinos.git"
+  url "https://github.com/trilinos/Trilinos.git", :tag => "trilinos-release-12-14-1"
+  version "12.14.1"
+
+  bottle do
+    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
+    sha256 "fb3ff27c02faed947e2db6d9414727e51920f84ade86b7ae8e15bcaaf732661b" => :mojave
+  end
 
   hdf5 = "nlesc/nlesc/hdf5"
   parmetis = "nlesc/nlesc/parmetis"
