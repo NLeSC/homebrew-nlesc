@@ -10,6 +10,11 @@ class Netcdf < Formula
   depends_on "gcc" # for gfortran
   depends_on "nlesc/nlesc/hdf5"
 
+  bottle do
+    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
+    sha256 "ec756b6810582574aa93de55702e2c5af120cc277a4e8c0e4c98a41bfa4a08d8" => :mojave
+  end
+
   resource "cxx" do
     url "https://github.com/Unidata/netcdf-cxx4/archive/v4.3.0.tar.gz"
     sha256 "25da1c97d7a01bc4cee34121c32909872edd38404589c0427fefa1301743f18f"

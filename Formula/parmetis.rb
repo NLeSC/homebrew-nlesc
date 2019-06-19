@@ -8,6 +8,12 @@ class Parmetis < Formula
   depends_on "metis"
   depends_on "open-mpi"
 
+  bottle do
+    cellar :any
+    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
+    sha256 "e2c1c1efb918f711ba2b93d4547de6c83a95171e27f3b6395a6e76e5ddd4c5dd" => :mojave
+  end
+
   # Bug fixes from PETSc developers. Mirrored because the SHA-256s get
   # invalidated every time Bitbucket updates the Git version they use.
   patch do

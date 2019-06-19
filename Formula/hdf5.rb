@@ -6,6 +6,12 @@ class Hdf5 < Formula
 
   keg_only "nlesc/nlesc/hdf5 conflicts with homebrew/core/hdf5"
 
+  bottle do
+    cellar :any
+    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
+    sha256 "9c11fbd3308b174fbda8b30379dfb1eddacd79558d972338396e330eb3aff65b" => :mojave
+  end
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
