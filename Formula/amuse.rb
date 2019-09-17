@@ -4,7 +4,11 @@ class Amuse < Formula
   desc "Python virtualenv for AMUSE"
   homepage "http://www.amusecode.org/"
   url "https://github.com/amusecode/amuse.git", :tag => "v12.0.0"
-  head  "https://github.com/amusecode/amuse.git"
+  if ENV["HOMEBREW_AMUSE_GIT"]
+    head ENV["HOMEBREW_AMUSE_GIT"]
+  else
+    head "https://github.com/amusecode/amuse.git"
+  end
 
   hdf5 = "nlesc/nlesc/hdf5"
   netcdf = "nlesc/nlesc/netcdf"
