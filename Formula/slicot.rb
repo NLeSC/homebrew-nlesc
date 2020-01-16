@@ -6,6 +6,11 @@ class Slicot < Formula
   version "5.0+20101122"
   sha256 "fa80f7c75dab6bfaca93c3b374c774fd87876f34fba969af9133eeaea5f39a3d"
 
+  bottle do
+    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
+    sha256 "9ba93b26a6d66923223b6f1c1509515ab59480a8f429564c7813e4ae619f3534" => :mojave
+  end
+
   depends_on "gcc" # for gfortran
 
   def install
