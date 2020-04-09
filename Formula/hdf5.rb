@@ -1,15 +1,15 @@
 class Hdf5 < Formula
   desc "File format designed to store large amounts of data"
   homepage "https://www.hdfgroup.org/HDF5"
-  url "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.4/src/hdf5-1.10.4.tar.bz2"
-  sha256 "1267ff06aaedc04ca25f7c6026687ea2884b837043431195f153401d942b28df"
+  url "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.bz2"
+  sha256 "97906268640a6e9ce0cde703d5a71c9ac3092eded729591279bf2e3ca9765f61"
 
   keg_only "nlesc/nlesc/hdf5 conflicts with homebrew/core/hdf5"
 
   bottle do
+    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
     cellar :any
-    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
-    sha256 "9c11fbd3308b174fbda8b30379dfb1eddacd79558d972338396e330eb3aff65b" => :mojave
+    sha256 "bfe4f96c2c426025720cb2b3038a6d6af29c75f7eb7a6729a17c46db6302c45f" => :mojave
   end
 
   depends_on "autoconf" => :build
@@ -20,7 +20,7 @@ class Hdf5 < Formula
   depends_on "szip"
 
   def install
-    inreplace %w[c++/src/h5c++.in fortran/src/h5fc.in tools/src/misc/h5cc.in],
+    inreplace %w[c++/src/h5c++.in fortran/src/h5fc.in],
       "${libdir}/libhdf5.settings",
       "#{pkgshare}/libhdf5.settings"
 

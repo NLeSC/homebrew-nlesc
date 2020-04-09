@@ -5,8 +5,9 @@ class Trilinos < Formula
   version "12.14.1"
 
   bottle do
-    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
-    sha256 "fb3ff27c02faed947e2db6d9414727e51920f84ade86b7ae8e15bcaaf732661b" => :mojave
+    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
+    rebuild 1
+    sha256 "a299610327a839c257b0e507a99562068eb18a4c346e944d606b6ae0b5e74cdb" => :mojave
   end
 
   hdf5 = "nlesc/nlesc/hdf5"
