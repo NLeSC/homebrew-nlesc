@@ -11,8 +11,9 @@ class Netcdf < Formula
   depends_on "nlesc/nlesc/hdf5"
 
   bottle do
-    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
-    sha256 "ec756b6810582574aa93de55702e2c5af120cc277a4e8c0e4c98a41bfa4a08d8" => :mojave
+    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
+    rebuild 1
+    sha256 "316194f40809253f2bc289d8cb0a62d7ff320f75befb846de28badd68ec83d9a" => :mojave
   end
 
   resource "cxx" do
