@@ -9,9 +9,10 @@ class Parmetis < Formula
   depends_on "open-mpi"
 
   bottle do
+    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
     cellar :any
-    root_url "http://gitlabci.ci-nlesc.surf-hosted.nl"
-    sha256 "e2c1c1efb918f711ba2b93d4547de6c83a95171e27f3b6395a6e76e5ddd4c5dd" => :mojave
+    rebuild 1
+    sha256 "3598f9d764e022fb4379715a63765621c4eb8abc2d732dcb223955d961161cf2" => :mojave
   end
 
   # Bug fixes from PETSc developers. Mirrored because the SHA-256s get
