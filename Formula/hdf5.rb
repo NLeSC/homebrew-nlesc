@@ -9,7 +9,8 @@ class Hdf5 < Formula
   bottle do
     root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
     cellar :any
-    sha256 "dc8fd2268b5939fd335d8e78bc3e7728f96221d545f41cada6dfe050276e86ff" => :mojave
+    rebuild 1
+    sha256 "a56ac70c310447e7cb911107bc156fe232cb13872b42e3432b34e33bc63912de" => :mojave
   end
 
   depends_on "autoconf" => :build

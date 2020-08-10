@@ -11,8 +11,8 @@ class Parmetis < Formula
   bottle do
     root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
     cellar :any
-    rebuild 1
-    sha256 "3598f9d764e022fb4379715a63765621c4eb8abc2d732dcb223955d961161cf2" => :mojave
+    rebuild 2
+    sha256 "657c7921349493b37c55023b8f7b0eb224ebaa3db1ca0ca706db9e34a68e3343" => :mojave
   end
 
   # Bug fixes from PETSc developers. Mirrored because the SHA-256s get
