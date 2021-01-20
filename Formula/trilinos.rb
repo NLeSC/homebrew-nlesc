@@ -1,13 +1,12 @@
 class Trilinos < Formula
   desc "Solution of large-scale, multi-physics problems"
   homepage "https://trilinos.github.io/"
-  url "https://github.com/trilinos/Trilinos.git", :tag => "trilinos-release-12-14-1"
-  version "12.14.1"
+  url "https://github.com/trilinos/Trilinos.git", :tag => "trilinos-release-13-0-1"
+  version "13.0.1"
 
   bottle do
     root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
-    rebuild 4
-    sha256 "3556486d705d0192f7eea61aa74bb45235a61a8cd8b7d3512b9e54e525481820" => :mojave
+    sha256 "3be23b5df2cbebf041a256fb25cf8fa708ecc32d82172df9aae0fcc07521a09f" => :mojave
   end
 
   hdf5 = "nlesc/nlesc/hdf5"
@@ -29,6 +28,7 @@ class Trilinos < Formula
       -DCMAKE_INSTALL_PREFIX=#{prefix}
       -DCMAKE_BUILD_TYPE:STRING=Release
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+      -DCMAKE_CXX_EXTENSIONS=ON
 
       -DBUILD_SHARED_LIBS=ON
 
