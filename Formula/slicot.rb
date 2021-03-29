@@ -7,10 +7,9 @@ class Slicot < Formula
   sha256 "fa80f7c75dab6bfaca93c3b374c774fd87876f34fba969af9133eeaea5f39a3d"
 
   bottle do
-    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
-    cellar :any_skip_relocation
-    rebuild 1
-    sha256 "1b8139ac2fb137ada8f1b0b8a2536f7ceaae58633d79fe8923cc440462872a1e" => :mojave
+    root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, catalina: "a8825c483ae212756e960497cf815b22a18970fd4a6744b8a6fa2b3ab683baa7"
   end
 
   depends_on "gcc" # for gfortran

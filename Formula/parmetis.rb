@@ -8,13 +8,6 @@ class Parmetis < Formula
   depends_on "metis"
   depends_on "open-mpi"
 
-  bottle do
-    root_url "https://github.com/nlesc-smcm/i-emic/releases/download/depends/"
-    cellar :any
-    rebuild 2
-    sha256 "657c7921349493b37c55023b8f7b0eb224ebaa3db1ca0ca706db9e34a68e3343" => :mojave
-  end
-
   # Bug fixes from PETSc developers. Mirrored because the SHA-256s get
   # invalidated every time Bitbucket updates the Git version they use.
   patch do
