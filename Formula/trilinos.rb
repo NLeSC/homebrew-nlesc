@@ -6,14 +6,13 @@ class Trilinos < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    rebuild 2
-    sha256 catalina: "0be1f355f2502108d4d7dcfb2df49e5fe31903f4f2c0e28c754f400757e4b02f"
+    sha256 catalina: "758dd840a885bea5354165a1d39eb2e04ed26340f28cd47a9913ddeb1f46af4f"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
   parmetis = "nlesc/nlesc/parmetis"
 
-  keg_only "it is only configured to work for nlesc/nlesc/i-emic"
+  keg_only "it is only configured to work for OMUSE"
 
   depends_on "boost" => :build
   depends_on "cmake" => :build
@@ -124,10 +123,6 @@ END_PYTRILINOS_PATCH
     end
 
     inreplace "#{prefix}/lib/cmake/Trilinos/TrilinosConfig.cmake", "PyTrilinos;",""
-    version = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
-    site_packages = "lib/python#{version}/site-packages"
-    pth_contents = "import site; site.addsitedir('#{prefix/site_packages}')\n"
-    (prefix/site_packages/"homebrew-trilinos.pth").write pth_contents
   end
 
   test do
