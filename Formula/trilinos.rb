@@ -12,8 +12,6 @@ class Trilinos < Formula
   netcdf = "nlesc/nlesc/netcdf-mpi"
   parmetis = "nlesc/nlesc/parmetis"
 
-  keg_only "it is only configured to work for OMUSE"
-
   depends_on "boost" => :build
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
