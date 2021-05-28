@@ -6,7 +6,8 @@ class Trilinos < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 catalina: "758dd840a885bea5354165a1d39eb2e04ed26340f28cd47a9913ddeb1f46af4f"
+    rebuild 1
+    sha256 catalina: "a88cafda11871ec530c281101c037892176554e92748cc964f31230ea1e0fd4e"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
@@ -96,6 +97,7 @@ END_PYTRILINOS_PATCH
 
       -DTrilinos_VERBOSE_CONFIGURE:BOOL=OFF
       -DTrilinos_ENABLE_DEBUG=OFF
+      -DTrilinos_ENABLE_Gtest=OFF
       -DTrilinos_ENABLE_Export_Makefiles:BOOL=ON
       -DTrilinos_ENABLE_EXAMPLES:BOOL=OFF
       -DTrilinos_ENABLE_TESTS:BOOL=OFF
