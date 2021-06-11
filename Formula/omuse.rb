@@ -3,12 +3,11 @@ class Omuse < Formula
 
   desc "Python virtualenv for OMUSE"
   homepage "https://github.com/omuse-geoscience/omuse/"
-  url "https://github.com/omuse-geoscience/omuse.git"
-  version "1.2.8"
+  url "https://github.com/omuse-geoscience/omuse.git", :tag => "v2021.6.0"
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 cellar: :any, catalina: "e8448f6a9f793efb0d2105bb7f85b1fd8d2652455e1bd8daac3874c068d4736c"
+    sha256 cellar: :any, catalina: "2c8c0e5585e7ec16f042cc681cb46fdc588a0f8b3b6aa4d1954e31dba7d85afa"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
@@ -121,6 +120,28 @@ class Omuse < Formula
     sha256 "bfd18a0a84b85e0fcc4283af24ffe2bbf300e3db60495ab4e86a7bfaebdfc3dd"
   end
 
+  patch <<-END_PYTHON_OMUSE_PATCH
+--- a/python-omuse   2021-06-09 17:49:49.000000000 +0100
++++ b/python-omuse   2021-06-09 17:49:37.000000000 +0100
+@@ -0,0 +1,2 @@
++#!/usr/bin/env sh
++exec /usr/local/Cellar/omuse/2021.6.0/libexec/bin/python "$@"
+END_PYTHON_OMUSE_PATCH
+
+  patch <<-END_OMUSE_MODULE_PATCH
+--- a/src/omuse/__init__.py   2021-06-09 17:49:49.000000000 +0100
++++ b/src/omuse/__init__.py   2021-06-09 17:49:37.000000000 +0100
+@@ -0,0 +1,1 @@
++__path__ = __import__('pkgutil').extend_path(__path__, __name__)
+END_OMUSE_MODULE_PATCH
+
+  patch <<-END_OMUSE_COMMUNITY_MODULE_PATCH
+--- a/src/omuse/community/__init__.py   2021-06-09 17:49:49.000000000 +0100
++++ b/src/omuse/community/__init__.py   2021-06-09 17:49:37.000000000 +0100
+@@ -0,0 +1,1 @@
++__path__ = __import__('pkgutil').extend_path(__path__, __name__)
+END_OMUSE_COMMUNITY_MODULE_PATCH
+
   def install
     venv = virtualenv_create(libexec, "python3")
 
@@ -131,29 +152,39 @@ class Omuse < Formula
     cd "packages/omuse-framework" do
       system "#{libexec}/bin/python", "setup.py", "sdist"
       version = `#{libexec}/bin/python setup.py --version`
-      sdist_file = "dist/omuse-framework-" + version.strip + ".tar.gz"
+      version = version[0, version.index("\n")]
+      sdist_file = "dist/omuse-framework-" + version + ".tar.gz"
       system "#{libexec}/bin/pip", "install", "-v", "--no-deps", "--ignore-installed", sdist_file
     end
 
-    version = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
-    site_packages = "lib/python#{version}/site-packages"
+    py_version = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
+    site_packages = "lib/python#{py_version}/site-packages"
     pth_contents = "import site; site.addsitedir('#{Formula["trilinos"].prefix/site_packages}')\n"
-    (prefix/site_packages/"homebrew-trilinos.pth").write pth_contents
+    (libexec/site_packages/"homebrew-trilinos.pth").write pth_contents
+    (libexec/site_packages/"omuse.pth").write <<EOS
+import sys, glob; sys.path.extend(glob.iglob('/usr/local/opt/omuse-*/libexec/#{site_packages}'))
+EOS
 
     inreplace "#{libexec}/bin/activate", "PS1=\"(libexec)", "PS1=\"(OMUSE)"
-    bin.install_symlink "#{libexec}/bin/python" => "python-omuse"
+
+    chmod 0755, "python-omuse"
+    bin.install "python-omuse"
   end
 
   def caveats
     s = <<EOS
 Dependencies were installed in a virtualenv.
-To activate and use it, run:
+To start a python interpreter with omuse's packages accessible, run:
+
+    python-omuse
+
+For scripts, use the following shebang at the start:
+
+    #!/usr/bin/env python-omuse
+
+Alternatively, you can manually activate the virtualenv using:
 
     . #{prefix}/libexec/bin/activate
-
-Or add an alias to do so to your ~/.bashrc:
-
-    alias omuse-env='. #{prefix}/libexec/bin/activate'
 
 To deactivate, run:
 
