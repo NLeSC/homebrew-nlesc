@@ -7,7 +7,8 @@ class OmuseIemic < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 cellar: :any, catalina: "18ff03bbcf72cd877b3fc09e92ba44ade7a21262611de2ec95e0691c5b8f3e24"
+    rebuild 1
+    sha256 cellar: :any, catalina: "76e873037e43ce9c69b8e71cc7d3deac0138dab0aacd5ccc60011f002f536ac2"
   end
 
   omuse = "nlesc/nlesc/omuse"
@@ -57,6 +58,9 @@ END_OMUSE_COMMUNITY_INIT_PATCH
     rm (libexec/site_packages/"homebrew-omuse.pth")
     (libexec/site_packages/"omuse").install "__init__.py"
     (libexec/site_packages/"omuse"/"community").install "community/__init__.py"
+
+    pth_contents = "import site; site.addsitedir('#{Formula["trilinos"].prefix/site_packages}')\n"
+    (libexec/site_packages/"omuse-iemic.pth").write pth_contents
   end
 
   def caveats
@@ -70,13 +74,18 @@ For scripts, use the following shebang at the start:
 
     #!/usr/bin/env python-omuse
 
-Alternatively, you can manually activate the virtualenv using:
+Alternatively, you can create a virtualenv including omuse using:
 
-    . #{Formula["omuse"].prefix}/libexec/bin/activate
+    omuse-env <DIR>
+
+To activate, run:
+
+    . <DIR>/bin/activate
 
 To deactivate, run:
 
     deactivate
+
 EOS
     s
   end

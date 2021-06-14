@@ -7,7 +7,8 @@ class Omuse < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 cellar: :any, catalina: "2c8c0e5585e7ec16f042cc681cb46fdc588a0f8b3b6aa4d1954e31dba7d85afa"
+    rebuild 1
+    sha256 cellar: :any, catalina: "f57a5cb2b7259945a24be6ecfa211e96d4d2dab6c76d0462f7b487afae7ca8e0"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
@@ -15,6 +16,7 @@ class Omuse < Formula
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "python@3.9"
+  depends_on "freetype"
   depends_on "gcc" # for gfortran
   depends_on "numpy"
   depends_on "scipy"
@@ -114,6 +116,35 @@ class Omuse < Formula
     url "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz"
     sha256 "b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
   end
+  resource "Cycler" do
+    url "https://files.pythonhosted.org/packages/c2/4b/137dea450d6e1e3d474e1d873cd1d4f7d3beed7e0dc973b06e8e10d32488/cycler-0.10.0.tar.gz"
+    sha256 "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"
+  end
+
+  resource "kiwisolver" do
+    url "https://files.pythonhosted.org/packages/90/55/399ab9f2e171047d28933ae4b686d9382d17e6c09a01bead4a6f6b5038f4/kiwisolver-1.3.1.tar.gz"
+    sha256 "950a199911a8d94683a6b10321f9345d5a3a8433ec58b217ace979e18f16e248"
+  end
+
+  resource "Pillow" do
+    url "https://files.pythonhosted.org/packages/21/23/af6bac2a601be6670064a817273d4190b79df6f74d8012926a39bc7aa77f/Pillow-8.2.0.tar.gz"
+    sha256 "a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1"
+  end
+
+  resource "python-dateutil" do
+    url "https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0/python-dateutil-2.8.1.tar.gz"
+    sha256 "73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"
+  end
+
+  resource "six" do
+    url "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
+    sha256 "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
+  end
+
+  resource "matplotlib" do
+    url "https://files.pythonhosted.org/packages/60/d3/286925802edaeb0b8834425ad97c9564ff679eb4208a184533969aa5fc29/matplotlib-3.4.2.tar.gz"
+    sha256 "d8d994cefdff9aaba45166eb3de4f5211adb4accac85cbf97137e98f26ea0219"
+  end
 
   resource "amuse-framework" do
     url "https://files.pythonhosted.org/packages/dd/f6/d4d15d01cb10b5772919f5c24a637d4b16556d1bcf02457b72befd49b6cd/amuse-framework-2021.3.1.tar.gz"
@@ -125,7 +156,7 @@ class Omuse < Formula
 +++ b/python-omuse   2021-06-09 17:49:37.000000000 +0100
 @@ -0,0 +1,2 @@
 +#!/usr/bin/env sh
-+exec /usr/local/Cellar/omuse/2021.6.0/libexec/bin/python "$@"
++exec LIBEXEC/bin/python "$@"
 END_PYTHON_OMUSE_PATCH
 
   patch <<-END_OMUSE_MODULE_PATCH
@@ -141,6 +172,20 @@ END_OMUSE_MODULE_PATCH
 @@ -0,0 +1,1 @@
 +__path__ = __import__('pkgutil').extend_path(__path__, __name__)
 END_OMUSE_COMMUNITY_MODULE_PATCH
+
+  patch <<-END_OMUSE_ENV_PATCH
+--- a/omuse-env   2021-06-09 17:49:49.000000000 +0100
++++ b/omuse-env   2021-06-09 17:49:37.000000000 +0100
+@@ -0,0 +1,8 @@
++#!/usr/bin/env sh
++if [ "$#" -ne 1 ]; then
++    printf "Usage:\\n"
++    printf "omuse-env DIR"
++    exit 1
++fi
++LIBEXEC/bin/python -m venv "$1" || exit 1
++printf "import site; site.addsitedir('LIBEXEC/SITE_PACKAGES')\\n" >"$1"/SITE_PACKAGES/omuse.pth
+END_OMUSE_ENV_PATCH
 
   def install
     venv = virtualenv_create(libexec, "python3")
@@ -159,16 +204,23 @@ END_OMUSE_COMMUNITY_MODULE_PATCH
 
     py_version = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
     site_packages = "lib/python#{py_version}/site-packages"
-    pth_contents = "import site; site.addsitedir('#{Formula["trilinos"].prefix/site_packages}')\n"
-    (libexec/site_packages/"homebrew-trilinos.pth").write pth_contents
+
     (libexec/site_packages/"omuse.pth").write <<EOS
-import sys, glob; sys.path.extend(glob.iglob('/usr/local/opt/omuse-*/libexec/#{site_packages}'))
+import glob; [addsitedir(p) for p in  glob.iglob('/usr/local/opt/omuse-*/libexec/lib/python3.9/site-packages')]
 EOS
 
     inreplace "#{libexec}/bin/activate", "PS1=\"(libexec)", "PS1=\"(OMUSE)"
 
+    inreplace "python-omuse", "LIBEXEC", "#{libexec}"
+
+    inreplace "omuse-env", "SITE_PACKAGES", "#{site_packages}"
+    inreplace "omuse-env", "LIBEXEC", "#{libexec}"
+
     chmod 0755, "python-omuse"
     bin.install "python-omuse"
+
+    chmod 0755, "omuse-env"
+    bin.install "omuse-env"
   end
 
   def caveats
@@ -182,9 +234,13 @@ For scripts, use the following shebang at the start:
 
     #!/usr/bin/env python-omuse
 
-Alternatively, you can manually activate the virtualenv using:
+Alternatively, you can create a virtualenv including omuse using:
 
-    . #{prefix}/libexec/bin/activate
+    omuse-env <DIR>
+
+To activate, run:
+
+    . <DIR>/bin/activate
 
 To deactivate, run:
 
