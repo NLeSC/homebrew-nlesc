@@ -3,12 +3,11 @@ class OmuseIemic < Formula
 
   desc "I-EMIC package for OMUSE"
   homepage "https://github.com/omuse-geoscience/omuse/"
-  url "https://github.com/omuse-geoscience/omuse.git", :tag => "v2021.6.0"
+  url "https://github.com/omuse-geoscience/omuse.git", :tag => "v2021.6.1"
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    rebuild 1
-    sha256 cellar: :any, catalina: "76e873037e43ce9c69b8e71cc7d3deac0138dab0aacd5ccc60011f002f536ac2"
+    sha256 cellar: :any, catalina: "8b6e27a43b689ac76d053bfd76c40c554fdf4ee7856205aededed034f71a16fe"
   end
 
   omuse = "nlesc/nlesc/omuse"

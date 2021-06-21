@@ -3,12 +3,11 @@ class Omuse < Formula
 
   desc "Python virtualenv for OMUSE"
   homepage "https://github.com/omuse-geoscience/omuse/"
-  url "https://github.com/omuse-geoscience/omuse.git", :tag => "v2021.6.0"
+  url "https://github.com/omuse-geoscience/omuse.git", :tag => "v2021.6.1"
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    rebuild 1
-    sha256 cellar: :any, catalina: "f57a5cb2b7259945a24be6ecfa211e96d4d2dab6c76d0462f7b487afae7ca8e0"
+    sha256 cellar: :any, catalina: "2dfc35f3e5dfdf3780ac283a3b9586418692a99a21651003987b6d4071c27f6f"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
@@ -221,6 +220,8 @@ EOS
 
     chmod 0755, "omuse-env"
     bin.install "omuse-env"
+
+    bin.install "#{libexec}/bin/amusifier"
   end
 
   def caveats
