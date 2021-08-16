@@ -7,7 +7,8 @@ class Omuse < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 cellar: :any, catalina: "2dfc35f3e5dfdf3780ac283a3b9586418692a99a21651003987b6d4071c27f6f"
+    rebuild 1
+    sha256 cellar: :any, catalina: "edfc416fc23b76b6cd416c0bd000ac07ac907a3ab32f5cc65115e8e2dcc4582c"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"

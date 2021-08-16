@@ -7,7 +7,8 @@ class OmuseIemic < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    sha256 cellar: :any, catalina: "8b6e27a43b689ac76d053bfd76c40c554fdf4ee7856205aededed034f71a16fe"
+    rebuild 1
+    sha256 cellar: :any, catalina: "9b10337f520c5ae2bdbfe2ed97bc3eea2586999b32876d8fbfe3f74974b5a77c"
   end
 
   omuse = "nlesc/nlesc/omuse"
