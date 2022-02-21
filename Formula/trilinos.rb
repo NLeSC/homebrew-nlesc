@@ -5,9 +5,9 @@ class Trilinos < Formula
   version "13.0.1"
 
   bottle do
-    root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles/"
-    rebuild 2
-    sha256 catalina: "b293fe5926f57f95b2b38d1e20568547b5a09c49cd3e8ddcf64388641e87e9d1"
+    root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles"
+    rebuild 3
+    sha256 cellar: :any, catalina: "56cf563fde4db679ca3c941985e84f530e03d294a97d39e79fea7de377949c61"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
