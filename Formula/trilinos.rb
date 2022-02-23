@@ -6,8 +6,8 @@ class Trilinos < Formula
 
   bottle do
     root_url "https://github.com/nlesc/homebrew-nlesc/releases/download/bottles"
-    rebuild 3
-    sha256 cellar: :any, catalina: "56cf563fde4db679ca3c941985e84f530e03d294a97d39e79fea7de377949c61"
+    rebuild 4
+    sha256 cellar: :any, catalina: "8433ed1f1d058978f43ba30c52df2c057716489fc24de96060c859438fdeff27"
   end
 
   netcdf = "nlesc/nlesc/netcdf-mpi"
@@ -123,6 +123,16 @@ END_PYTRILINOS_PATCH
     end
 
     inreplace "#{prefix}/lib/cmake/Trilinos/TrilinosConfig.cmake", "PyTrilinos;",""
+
+    Dir.glob("#{prefix}/include/*.export.*").each do |f|
+      inreplace f, %r{/Library/Developer/CommandLineTools/SDKs/MacOSX\d\d.\d.sdk/usr/lib/libz.tbd[ ;]?},"",false
+      inreplace f, %r{/Library/Developer/CommandLineTools/SDKs/MacOSX\d\d.\d.sdk/usr/lib/libdl.tbd[ ;]?},"",false
+    end
+
+    Dir.glob("#{prefix}/lib/cmake/*/*.cmake").each do |f|
+      inreplace f, %r{/Library/Developer/CommandLineTools/SDKs/MacOSX\d\d.\d.sdk/usr/lib/libz.tbd[ ;]?},"",false
+      inreplace f, %r{/Library/Developer/CommandLineTools/SDKs/MacOSX\d\d.\d.sdk/usr/lib/libdl.tbd[ ;]?},"",false
+    end
   end
 
   test do
